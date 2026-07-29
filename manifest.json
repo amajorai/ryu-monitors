@@ -1,0 +1,90 @@
+{
+  "id": "com.ryu.monitors",
+  "name": "Monitors",
+  "version": "1.0.0",
+  "description": "Website monitors: price, stock, keyword, content, and uptime watches with cross-device notification fan-out.",
+  "engines": {
+    "ryu": ">=0.0.1"
+  },
+  "runnables": [
+    {
+      "id": "monitors-companion",
+      "name": "Monitors",
+      "kind": "companion",
+      "config": {
+        "label": "Monitors",
+        "ui_entry": "./dist/index.html",
+        "ui_format": "html"
+      }
+    }
+  ],
+  "sidecars": [
+    {
+      "name": "ryu-monitors",
+      "process": {
+        "kind": "local",
+        "command": "ryu-monitors",
+        "command_env": "RYU_MONITORS_BIN",
+        "port_env": "RYU_MONITORS_PORT"
+      },
+      "port": 8003,
+      "health_path": "/health",
+      "http": {
+        "mount": "/api/monitors",
+        "public_mount": "/api/monitors",
+        "routes": [
+          { "path": "/alerts/stream" },
+          { "path": "/alerts" },
+          { "path": "/alerts/:id/ack" },
+          { "path": "/" },
+          { "path": "/:id" },
+          { "path": "/:id/run" },
+          { "path": "/:id/snapshots" },
+          { "path": "/:id/alerts" }
+        ]
+      },
+      "host_api": {
+        "grants": ["tools.invoke"]
+      }
+    }
+  ],
+  "permission_grants": ["monitors:crud", "tools.invoke"],
+  "companion": {
+    "label": "Monitors",
+    "icon": "radar"
+  },
+  "contributes": {
+    "views": [
+      {
+        "id": "surface:monitors",
+        "title": "Monitors",
+        "view": "list-detail",
+        "spec": {
+          "view": "list-detail",
+          "items": [],
+          "emptyText": "No monitors yet.",
+          "source": {
+            "http": { "method": "GET", "path": "/api/monitors" },
+            "items": "monitors",
+            "map": {
+              "title": "name",
+              "subtitle": "url",
+              "accessory": "last_status"
+            }
+          },
+          "itemActions": [
+            {
+              "id": "run",
+              "label": "Check now",
+              "style": "primary",
+              "http": {
+                "method": "POST",
+                "path": "/api/monitors/{{item.id}}/run"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
