@@ -1,0 +1,26 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "ryu.monitors",
+  "version": "0.2.0",
+  "description": "Watch websites and provider usage windows for changes and resets, with cross-device and channel notification fan-out.",
+  "author": {
+    "name": "Ryu",
+    "url": "https://ryuhq.com"
+  },
+  "homepage": "https://github.com/amajorai/ryu-monitors",
+  "repository": "https://github.com/amajorai/ryu-monitors",
+  "keywords": [
+    "monitoring",
+    "alerts",
+    "uptime",
+    "quota",
+    "usage reset",
+    "provider usage"
+  ],
+  "extensions": {
+    "com.ryuhq.ryu": {
+      "id": "@ryu/monitors",
+      "displayName": "Monitors"
+    }
+  }
+}
